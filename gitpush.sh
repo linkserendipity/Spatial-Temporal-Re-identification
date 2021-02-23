@@ -1,3 +1,3 @@
 git add -A
-git commit -m "st"
+git commit -m "one"
 git push
