@@ -3,7 +3,7 @@ from shutil import copyfile
 import argparse
 import shutil
 
-download_path = "./raw-dataset/DukeMTMC-reID/"
+download_path = "/home/ls/raw-dataset/Market-1501"
 
 parser = argparse.ArgumentParser(description='prepare')
 parser.add_argument('--Market', action='store_true', help='prepare dataset market1501')
@@ -14,9 +14,9 @@ if not os.path.isdir(download_path):
     print('please change the download_path')
 
 if opt.Market:
-    save_path = "./dataset/Market1501_prepare/"
+    save_path = "/home/ls/raw-dataset/dataset/Market1501_prepare/"
 else:
-    save_path = "./dataset/DukeMTMC_prepare/"
+    save_path = "/home/ls/raw-dataset/dataset/DukeMTMC_prepare/"
 
 if not os.path.exists(save_path):
     os.makedirs(save_path)
@@ -128,7 +128,7 @@ def parse_frame(imgname, dict_cam_seq_max={}):
 
 
 def gen_train_all_rename():
-    path = "./dataset/Market1501_prepare/train_all/"
+    path = "/home/ls/raw-dataset/dataset/Market1501_prepare/train_all/"
     folderName = []
     for root, dirs, files in os.walk(path):
         folderName = dirs
@@ -138,8 +138,8 @@ def gen_train_all_rename():
     for fname in folderName:
         # print(fname)
 
-        if not os.path.exists("./dataset/market_rename/train_all/" + fname):
-            os.makedirs("./dataset/market_rename/train_all/" + fname)
+        if not os.path.exists("/home/ls/raw-dataset/dataset/market_rename/train_all/" + fname):
+            os.makedirs("/home/ls/raw-dataset/dataset/market_rename/train_all/" + fname)
 
         img_names = []
         for root, dirs, files in os.walk(path + fname):
@@ -151,13 +151,13 @@ def gen_train_all_rename():
             newname = parse_frame(imgname)
             # print(newname)
             srcfile = path + fname + "/" + imgname
-            dstfile = "./dataset/market_rename/train_all/" + fname + "/" + newname
+            dstfile = "/home/ls/raw-dataset/dataset/market_rename/train_all/" + fname + "/" + newname
             shutil.copyfile(srcfile, dstfile)
             # break  # 测试一个id
 
 
 def gen_train_rename():
-    path = "./dataset/Market1501_prepare/train/"
+    path = "/home/ls/raw-dataset/dataset/Market1501_prepare/train/"
     folderName = []
     for root, dirs, files in os.walk(path):
         folderName = dirs
@@ -167,8 +167,8 @@ def gen_train_rename():
     for fname in folderName:
         # print(fname)
 
-        if not os.path.exists("./dataset/market_rename/train/" + fname):
-            os.makedirs("./dataset/market_rename/train/" + fname)
+        if not os.path.exists("/home/ls/raw-dataset/dataset/market_rename/train/" + fname):
+            os.makedirs("/home/ls/raw-dataset/dataset/market_rename/train/" + fname)
 
         img_names = []
         for root, dirs, files in os.walk(path + fname):
@@ -180,13 +180,13 @@ def gen_train_rename():
             newname = parse_frame(imgname)
             # print(newname)
             srcfile = path + fname + "/" + imgname
-            dstfile = "./dataset/market_rename/train/" + fname + "/" + newname
+            dstfile = "/home/ls/raw-dataset/dataset/market_rename/train/" + fname + "/" + newname
             shutil.copyfile(srcfile, dstfile)
             # break  # 测试一个id
 
 
 def gen_val_rename():
-    path = "./dataset/Market1501_prepare/val/"
+    path = "/home/ls/raw-dataset/dataset/Market1501_prepare/val/"
     folderName = []
     for root, dirs, files in os.walk(path):
         folderName = dirs
@@ -196,8 +196,8 @@ def gen_val_rename():
     for fname in folderName:
         # print(fname)
 
-        if not os.path.exists("./dataset/market_rename/val/" + fname):
-            os.makedirs("./dataset/market_rename/val/" + fname)
+        if not os.path.exists("/home/ls/raw-dataset/dataset/market_rename/val/" + fname):
+            os.makedirs("/home/ls/raw-dataset/dataset/market_rename/val/" + fname)
 
         img_names = []
         for root, dirs, files in os.walk(path + fname):
@@ -209,13 +209,13 @@ def gen_val_rename():
             newname = parse_frame(imgname)
             # print(newname)
             srcfile = path + fname + "/" + imgname
-            dstfile = "./dataset/market_rename/val/" + fname + "/" + newname
+            dstfile = "/home/ls/raw-dataset/dataset/market_rename/val/" + fname + "/" + newname
             shutil.copyfile(srcfile, dstfile)
             # break  # 测试一个id
 
 
 def gen_query_rename():
-    path = "./dataset/Market1501_prepare/query/"
+    path = "/home/ls/raw-dataset/dataset/Market1501_prepare/query/"
     folderName = []
     for root, dirs, files in os.walk(path):
         folderName = dirs
@@ -225,8 +225,8 @@ def gen_query_rename():
     for fname in folderName:
         # print(fname)
 
-        if not os.path.exists("./dataset/market_rename/query/" + fname):
-            os.makedirs("./dataset/market_rename/query/" + fname)
+        if not os.path.exists("/home/ls/raw-dataset/dataset/market_rename/query/" + fname):
+            os.makedirs("/home/ls/raw-dataset/dataset/market_rename/query/" + fname)
 
         img_names = []
         for root, dirs, files in os.walk(path + fname):
@@ -238,13 +238,13 @@ def gen_query_rename():
             newname = parse_frame(imgname)
             # print(newname)
             srcfile = path + fname + "/" + imgname
-            dstfile = "./dataset/market_rename/query/" + fname + "/" + newname
+            dstfile = "/home/ls/raw-dataset/dataset/market_rename/query/" + fname + "/" + newname
             shutil.copyfile(srcfile, dstfile)
             # break  # 测试一个id
 
 
 def gen_gallery_rename():
-    path = "./dataset/Market1501_prepare/gallery/"
+    path = "/home/ls/raw-dataset/dataset/Market1501_prepare/gallery/"
     folderName = []
     for root, dirs, files in os.walk(path):
         folderName = dirs
@@ -254,8 +254,8 @@ def gen_gallery_rename():
     for fname in folderName:
         # print(fname)
 
-        if not os.path.exists("./dataset/market_rename/gallery/" + fname):
-            os.makedirs("./dataset/market_rename/gallery/" + fname)
+        if not os.path.exists("/home/ls/raw-dataset/dataset/market_rename/gallery/" + fname):
+            os.makedirs("/home/ls/raw-dataset/dataset/market_rename/gallery/" + fname)
 
         img_names = []
         for root, dirs, files in os.walk(path + fname):
@@ -267,7 +267,7 @@ def gen_gallery_rename():
             newname = parse_frame(imgname)
             # print(newname)
             srcfile = path + fname + "/" + imgname
-            dstfile = "./dataset/market_rename/gallery/" + fname + "/" + newname
+            dstfile = "/home/ls/raw-dataset/dataset/market_rename/gallery/" + fname + "/" + newname
             shutil.copyfile(srcfile, dstfile)
             # break  # 测试一个id
 
@@ -278,5 +278,5 @@ if opt.Market:
     gen_val_rename()
     gen_query_rename()
     gen_gallery_rename()
-    shutil.rmtree("./dataset/Market1501_prepare/")
+    shutil.rmtree("/home/ls/raw-dataset/dataset/Market1501_prepare/")
     print("Done!")
