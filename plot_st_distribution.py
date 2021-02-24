@@ -73,7 +73,9 @@ def gauss_smooth2(arr):
     return xxx
 
 
-result2 = scipy.io.loadmat('model/'+'ft_ResNet50_market_pcb'+'/'+'pytorch_result2.mat')
+# result2 = scipy.io.loadmat('model/'+'ft_ResNet50_market_pcb'+'/'+'pytorch_result2.mat')
+result2 = scipy.io.loadmat('pytorch_result2.mat')
+
 distribution = result2['distribution']
 
 #############################################################
