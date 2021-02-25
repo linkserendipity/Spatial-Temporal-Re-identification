@@ -22,7 +22,7 @@ from model import ft_net, ft_net_dense, PCB, PCB_test
 parser = argparse.ArgumentParser(description='Training')
 parser.add_argument('--gpu_ids',default='0', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
 parser.add_argument('--which_epoch',default='last', type=str, help='0,1,2,3...or last')
-parser.add_argument('--test_dir',default='/home/zzd/Market/pytorch',type=str, help='./test_data')
+parser.add_argument('--test_dir',default='/home/ls/raw-dataset/dataset/DukeMTMC_prepare/',type=str, help='./test_data')
 parser.add_argument('--name', default='ft_ResNet50', type=str, help='save model path')
 parser.add_argument('--batchsize', default=32, type=int, help='batchsize')
 parser.add_argument('--use_dense', action='store_true', help='use densenet121' )
@@ -42,8 +42,8 @@ for str_id in str_ids:
         gpu_ids.append(id)
 
 # set gpu ids
-if len(gpu_ids)>0:
-    torch.cuda.set_device(gpu_ids[0])
+# if len(gpu_ids)>0:
+    # torch.cuda.set_device(gpu_ids[0])
 
 ######################################################################
 # Load Data

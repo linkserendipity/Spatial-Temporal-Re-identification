@@ -3,7 +3,8 @@ from shutil import copyfile
 import argparse
 import shutil
 
-download_path = "/home/ls/raw-dataset/Market-1501"
+download_path = "/home/ls/raw-dataset/DukeMTMC-reID"
+# download_path = "/home/ls/raw-dataset/Market-1501"
 
 parser = argparse.ArgumentParser(description='prepare')
 parser.add_argument('--Market', action='store_true', help='prepare dataset market1501')
@@ -279,4 +280,5 @@ if opt.Market:
     gen_query_rename()
     gen_gallery_rename()
     shutil.rmtree("/home/ls/raw-dataset/dataset/Market1501_prepare/")
-    print("Done!")
+    
+print("Done!")

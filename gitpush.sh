@@ -1,3 +1,3 @@
 git add -A
-git commit -m "st"
+git commit -m "modified the path"
 git push

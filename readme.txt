@@ -1,7 +1,7 @@
 Market1501
 
 	1. data prepare
-		python3 prepare --Market
+		python3 prepare.py --Market
 	2. train
 		python3 train_market.py --PCB --gpu_ids 2 --name ft_ResNet50_pcb_market_e --erasing_p 0.5 --train_all --data_dir "/home/huangpg/st-reid/dataset/market_rename/"
 	3. test

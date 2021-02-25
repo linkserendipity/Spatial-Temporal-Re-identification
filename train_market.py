@@ -27,10 +27,10 @@ import json
 parser = argparse.ArgumentParser(description='Training')
 parser.add_argument('--gpu_ids',default='0', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
 parser.add_argument('--name',default='ft_ResNet50', type=str, help='output model name')
-parser.add_argument('--data_dir',default='/home/zzd/Market/pytorch',type=str, help='training dir path')
+parser.add_argument('--data_dir',default='/home/ls/raw-dataset/dataset/market_rename',type=str, help='training dir path') # /home/zzd/Market/pytorch
 parser.add_argument('--train_all', action='store_true', help='use all training data' )
 parser.add_argument('--color_jitter', action='store_true', help='use color jitter in training' )
-parser.add_argument('--batchsize', default=32, type=int, help='batchsize')
+parser.add_argument('--batchsize', default=32, type=int, help='batchsize') #Memory-Usage=10787M ???
 parser.add_argument('--erasing_p', default=0, type=float, help='Random Erasing probability, in [0,1]')
 parser.add_argument('--use_dense', action='store_true', help='use densenet121' )
 parser.add_argument('--PCB', action='store_true', help='use PCB+ResNet50' )
@@ -149,6 +149,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('-' * 10)
 
+        begin_time=time.time()
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
@@ -220,13 +221,17 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
                 if epoch%10 == 9:
                     save_network(model, epoch)
                 draw_curve(epoch)
-
+        
+        time_elapsed_epoch = time.time() - begin_time
+        print('Training time of this epoch is {:.0f}m {:.0f}s'.format(
+            time_elapsed_epoch // 60, time_elapsed_epoch % 60)) 
         print()
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
     #print('Best val Acc: {:4f}'.format(best_acc))
+    # todo
 
     # load best model weights
     model.load_state_dict(last_model_wts)
@@ -278,7 +283,8 @@ else:
 if opt.PCB:
     model = PCB(len(class_names))
 
-print(model)
+# print(model)
+# not showing the PCB model
 
 if use_gpu:
     model = model.cuda()

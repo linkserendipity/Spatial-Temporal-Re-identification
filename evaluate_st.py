@@ -205,5 +205,6 @@ print('alpha,smooth:',alpha,smooth)
 result = {'CMC':CMC.numpy()}
 
 scipy.io.savemat('model/'+name+'/'+'CMC_duke_two_stream_add'+str(alpha)+'.mat',result)
+# ! todo why is CMC_duke? not CMC_market?
 
 

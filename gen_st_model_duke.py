@@ -104,3 +104,4 @@ for i in range(len(train_path)):
 distribution = spatial_temporal_distribution(train_cam, train_label_order, train_frames)
 result = {'distribution':distribution}
 scipy.io.savemat('model/'+name+'/'+'pytorch_result2.mat',result)
+print("get the st_model_duke!")

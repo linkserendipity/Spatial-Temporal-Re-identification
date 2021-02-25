@@ -19,7 +19,7 @@ import math
 # Options
 # --------
 parser = argparse.ArgumentParser(description='Training')
-parser.add_argument('--data_dir',default="/home/huangpg/test_gc_code/Market/market_rename/",type=str, help='./train_data')
+parser.add_argument('--data_dir',default="/home/ls/raw-dataset/dataset/market_rename/",type=str, help='./train_data')
 parser.add_argument('--name', default='ft_ResNet50_market_rename_pcb', type=str, help='save model path')
 
 opt = parser.parse_args()
@@ -140,3 +140,4 @@ distribution = spatial_temporal_distribution(train_cam, train_label_order, train
 
 result = {'distribution':distribution}
 scipy.io.savemat('model/'+name+'/'+'pytorch_result2.mat',result)
+print("get the st_model_market!")

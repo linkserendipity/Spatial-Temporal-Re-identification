@@ -46,8 +46,9 @@ for str_id in str_ids:
         gpu_ids.append(gid)
 
 # set gpu ids
-if len(gpu_ids)>0:
-    torch.cuda.set_device(gpu_ids[0])
+# ! use CUDA_VISIBLE_DEVICES=0,1 !!!
+# if len(gpu_ids)>0:
+    # torch.cuda.set_device(gpu_ids[0])
 #print(gpu_ids[0])
 
 if not os.path.exists("./model/"):
@@ -149,6 +150,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('-' * 10)
 
+        begin_time=time.time()
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
@@ -220,6 +222,9 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
                 if epoch%10 == 9:
                     save_network(model, epoch)
                 draw_curve(epoch)
+        time_elapsed_epoch = time.time() - begin_time
+        print('Training time of this epoch is {:.0f}m {:.0f}s'.format(
+            time_elapsed_epoch // 60, time_elapsed_epoch % 60)) 
 
         print()
 
@@ -278,7 +283,7 @@ else:
 if opt.PCB:
     model = PCB(len(class_names))
 
-print(model)
+# print(model)
 
 if use_gpu:
     model = model.cuda()
