@@ -37,13 +37,13 @@ Code for st-ReID(pytorch). We achieve **Rank@1=98.1%, mAP=87.6%** without re-ran
    2) python3 prepare.py --Market
 
 2. train (appearance feature learning) <br>
-python3 train_market.py --PCB --name ft_ResNet50_pcb_market_e --erasing_p 0.5 --train_all --data_dir "/home/huangpg/st-reid/dataset/market_rename/"
+python3 train_market.py --PCB --name ft_ResNet50_pcb_market_e --erasing_p 0.5 --train_all --data_dir "/home/ls/raw-dataset/dataset/market_rename/"
 
 3. test (appearance feature extraction) <br>
-python3 test_st_market.py --PCB --name ft_ResNet50_pcb_market_e --test_dir "/home/huangpg/st-reid/dataset/market_rename/" 
+python3 test_st_market.py --PCB --name ft_ResNet50_pcb_market_e --test_dir "/home/ls/raw-dataset/dataset/market_rename/"
 
 4. generate st model (spatial-temporal distribution) <br>
-python3 gen_st_model_market.py --name ft_ResNet50_pcb_market_e --data_dir "/home/huangpg/st-reid/dataset/market_rename/"
+python3 gen_st_model_market.py --name ft_ResNet50_pcb_market_e --data_dir "/home/ls/raw-dataset/dataset/market_rename/"
 
 5. evaluate (joint metric, you can use your own visual feature or spatial-temporal streams) <br>
 python3 evaluate_st.py --name ft_ResNet50_pcb_market_e 
