@@ -27,7 +27,8 @@ import json
 parser = argparse.ArgumentParser(description='Training')
 parser.add_argument('--gpu_ids',default='0', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
 parser.add_argument('--name',default='ft_ResNet50', type=str, help='output model name')
-parser.add_argument('--data_dir',default='/home/zzd/Market/pytorch',type=str, help='training dir path')
+parser.add_argument('--data_dir',default='/home/ccc/Link/data/dataset/market_rename/',type=str, help='training dir path') 
+#?
 parser.add_argument('--train_all', action='store_true', help='use all training data' )
 parser.add_argument('--color_jitter', action='store_true', help='use color jitter in training' )
 parser.add_argument('--batchsize', default=32, type=int, help='batchsize')
@@ -49,7 +50,7 @@ for str_id in str_ids:
 if len(gpu_ids)>0:
     torch.cuda.set_device(gpu_ids[0])
 #print(gpu_ids[0])
-
+#!!!modify the path and 
 if not os.path.exists("./model/"):
     os.makedirs("./model/")
 
@@ -278,7 +279,7 @@ else:
 if opt.PCB:
     model = PCB(len(class_names))
 
-print(model)
+# print(model)
 
 if use_gpu:
     model = model.cuda()

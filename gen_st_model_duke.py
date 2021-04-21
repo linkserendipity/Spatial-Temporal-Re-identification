@@ -19,12 +19,15 @@ import scipy.io
 # --------
 parser = argparse.ArgumentParser(description='Training')
 parser.add_argument('--data_dir',default="/home/sdb1/huangpg/st-reid/st_baseline/Duke/pytorch/",type=str, help='./train_data')
-parser.add_argument('--name', default='ft_ResNet50_duke_pcb', type=str, help='save model path')
+parser.add_argument('--name', default='ft_ResNet50_duke_pcb', type=str, help='save this data model path under the whole model path')
+parser.add_argument('--model_path', default='../ST_model', type=str, help='whole model path')
+#!add --model_path = '../ST_model'
+
 
 opt = parser.parse_args()
 name = opt.name
 data_dir = opt.data_dir
-
+model_path = opt.model_path #!!!!!!!!!!
 
 def get_id(img_path):
     camera_id = []
@@ -103,4 +106,4 @@ for i in range(len(train_path)):
 # distribution = spatial_temporal_distribution(train_cam, train_label, train_frames)
 distribution = spatial_temporal_distribution(train_cam, train_label_order, train_frames)
 result = {'distribution':distribution}
-scipy.io.savemat('model/'+name+'/'+'pytorch_result2.mat',result)
+scipy.io.savemat(model_path+'/'+name+'/'+'pytorch_result2.mat',result)

@@ -3,20 +3,23 @@ from shutil import copyfile
 import argparse
 import shutil
 
-download_path = "/home/ccc/Link/data/market1501"
 
 parser = argparse.ArgumentParser(description='prepare')
 parser.add_argument('--Market', action='store_true', help='prepare dataset market1501')
 parser.add_argument('--Duke', action='store_true', help='prepare dataset Duke-MTMC')
 opt = parser.parse_args()
 
-if not os.path.isdir(download_path):
-    print('please change the download_path')
 
 if opt.Market:
     save_path = "/home/ccc/Link/data/dataset/Market1501_prepare/"
+    download_path = "/home/ccc/Link/data/market1501"
 else:
     save_path = "/home/ccc/Link/data/dataset/DukeMTMC_prepare/"
+    download_path = "/home/ccc/Link/data/dukemtmc-reid/DukeMTMC-reID"
+
+
+if not os.path.isdir(download_path):
+    print('please change the download_path')
 
 if not os.path.exists(save_path):
     os.makedirs(save_path)
@@ -279,4 +282,6 @@ if opt.Market:
     gen_query_rename()
     gen_gallery_rename()
     shutil.rmtree("/home/ccc/Link/data/dataset/Market1501_prepare/")
-    print("Done!!")
+    print("market_rename Done!!")
+else:
+    print("DukeMTMC_prepare Done!!")

@@ -10,12 +10,15 @@ parser = argparse.ArgumentParser(description='evaluate')
 parser.add_argument('--name',default='ft_ResNet50_market_pcb_r', type=str, help='0,1,2,3...or last')
 parser.add_argument('--alpha', default=5, type=float, help='alpha')
 parser.add_argument('--smooth', default=50, type=float, help='smooth')
+parser.add_argument('--model_path', default='../ST_model', type=str, help='whole model path')
+#! add --model_path = '../ST_model'
+
 opt = parser.parse_args()
 name = opt.name
-alpha=opt.alpha
-smooth=opt.smooth
-
-
+alpha = opt.alpha
+smooth = opt.smooth
+model_path = opt.model_path
+#! !!!!!!!!!
 
 #######################################################################
 # Evaluate
@@ -161,7 +164,7 @@ def gauss_smooth2(arr,o):
     return xxx
 
 ######################################################################
-result = scipy.io.loadmat('model/'+name+'/'+'pytorch_result.mat')
+result = scipy.io.loadmat(model_path+'/'+name+'/'+'pytorch_result.mat')
 query_feature = result['query_f']
 query_cam = result['query_cam'][0]
 query_label = result['query_label'][0]
@@ -183,7 +186,7 @@ print('gallery_feature:',gallery_feature.shape)
 
 #############################################################
 
-result2 = scipy.io.loadmat('model/'+name+'/'+'pytorch_result2.mat')
+result2 = scipy.io.loadmat(model_path+'/'+name+'/'+'pytorch_result2.mat')
 distribution = result2['distribution']
 
 #############################################################
@@ -225,6 +228,6 @@ for i in range(len(all_labels)):
 
 print('type(all_scores):',type(all_scores))
 all_scores = {'all_scores':all_scores}
-scipy.io.savemat('model/'+name+'/'+'all_scores'+'.mat',all_scores)
+scipy.io.savemat(model_path+'/'+name+'/'+'all_scores'+'.mat',all_scores)
 ###############################################################################################
 
