@@ -19,41 +19,41 @@ import math
 # Options
 # --------
 parser = argparse.ArgumentParser(description='Training')
-parser.add_argument('--data_dir',default="/home/huangpg/test_gc_code/Market/market_rename/",type=str, help='./train_data')
-parser.add_argument('--name', default='ft_ResNet50_market_rename_pcb', type=str, help='save model path')
+parser.add_argument('--data_dir',default="/home/ccc/Link/data/dataset/market_rename/",type=str, help='./train_data')
+parser.add_argument('--name', default='ft_ResNet50_pcb_market_e', type=str, help='save model path')
 
 opt = parser.parse_args()
 name = opt.name
 data_dir = opt.data_dir
-
+model_path = '../ST_model'
 
 def get_id(img_path):
     camera_id = []
     labels = []
     frames = []
-    for path, v in img_path:
-        filename = path.split('/')[-1]
-        label = filename[0:4]
-        camera = filename.split('c')[1]
+    for path, v in img_path:                    # * path='/home/ccc/Link/data/dataset/market_rename/train/0002/0002_c1_f0000451_03.jpg'
+        filename = path.split('/')[-1]          # * filename='0002_c1_f0000451_03.jpg'
+        label = filename[0:4]                   # * label=0002 person id
+        camera = filename.split('c')[1]         # * camera = '1_f0000451_03.jpg'  camera[0]='1'
         # frame = filename[9:16]
-        frame = filename.split('_')[2][1:]
+        frame = filename.split('_')[2][1:]      # * frame='0000451'
         if label[0:2]=='-1':
             labels.append(-1)
         else:
             labels.append(int(label))
         camera_id.append(int(camera[0]))
         frames.append(int(frame))
-    return camera_id, labels, frames
+    return camera_id, labels, frames           
 
 def spatial_temporal_distribution(camera_id, labels, frames):
-    class_num=751
-    max_hist = 5000
-    spatial_temporal_sum = np.zeros((class_num,8))                       
+    class_num=751 #* 751 people
+    max_hist = 5000 #! max_hist??
+    spatial_temporal_sum = np.zeros((class_num,8))                        #!!! 8 cameras???
     spatial_temporal_count = np.zeros((class_num,8))
     eps = 0.0000001
     interval = 100.0
     
-    for i in range(len(camera_id)):
+    for i in range(len(camera_id)):         #! camera_id is a list of 751 person?
         label_k = labels[i]                 #### not in order, done
         cam_k = camera_id[i]-1              ##### ### ### ### ### ### ### ### ### ### ### ### # from 1, not 0
         frame_k = frames[i]
@@ -120,23 +120,25 @@ transform_train_list = [
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ]
 
-
-image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,transform_train_list) for x in ['train_all']}
-train_path = image_datasets['train_all'].imgs
+#* image_data: x 是文件夹序号，person id 0002对应x=0，0007对应x=1
+image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x) ,transform_train_list) for x in ['train_all']} #* transform_train_list有什么用?
+train_path = image_datasets['train_all'].imgs   # ! len(train_path)=12936
 train_cam, train_label, train_frames = get_id(train_path)
+#! train_path[0]=('/home/ccc/Link/data/dataset/market_rename/train_all/0002/0002_c1_f0000451_03.jpg', 0) 
 
 train_label_order = []
 for i in range(len(train_path)):
     train_label_order.append(train_path[i][1]) 
+# * train_path[i][1]=0,0,...46个0,1,1,1,1
 
-
-# distribution = spatial_temporal_distribution(train_cam, train_label, train_frames)
+#todo distribution = spatial_temporal_distribution(train_cam, train_label, train_frames) 
+#! label=0002 0007 change to order=0,0...,1,1...1,2,2...2,3
 distribution = spatial_temporal_distribution(train_cam, train_label_order, train_frames)
 
 # for i in range(0,8):
 #     for j in range(0,8):
 #         print("gauss "+str(i)+"->"+str(j))
 #         gauss_smooth(distribution[i][j])
-
-result = {'distribution':distribution}
-scipy.io.savemat('model/'+name+'/'+'pytorch_result2.mat',result)
+#?????
+result = {'distribution':distribution} 
+scipy.io.savemat(model_path+'/'+name+'/'+'pytorch_result2.mat', result)

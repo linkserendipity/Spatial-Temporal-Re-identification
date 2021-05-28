@@ -24,7 +24,7 @@ model_path = opt.model_path
 
 
 #######################################################################
-# Evaluate
+#! Evaluate ap_tmp, CMC_tmp = evaluate(query_feature[i],query_label[i],query_cam[i],query_frames[i], gallery_feature,gallery_label,gallery_cam,gallery_frames,distribution)
 def evaluate(qf,ql,qc,qfr,gf,gl,gc,gfr,distribution):
     query = qf
     score = np.dot(gf,query)
