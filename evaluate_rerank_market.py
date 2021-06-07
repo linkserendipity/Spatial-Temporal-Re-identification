@@ -9,8 +9,10 @@ import math
 
 parser = argparse.ArgumentParser(description='evaluate')
 parser.add_argument('--name',default='ft_ResNet50_duke_pcb_r_c', type=str, help='0,1,2,3...or last')
+parser.add_argument('--model_path', default='../ST_model', type=str, help='whole model path')
 opt = parser.parse_args()
 name = opt.name
+model_path = opt.model_path
 
 #######################################################################
 # Evaluate
@@ -60,7 +62,7 @@ def compute_mAP(index, good_index, junk_index):
     return ap, cmc
 
 ######################################################################
-result = scipy.io.loadmat('./model/'+name+'/pytorch_result.mat')
+result = scipy.io.loadmat(model_path+'/' + name +'/pytorch_result.mat')
 query_feature = result['query_f']
 query_cam = result['query_cam'][0]
 query_label = result['query_label'][0]
@@ -69,7 +71,7 @@ gallery_cam = result['gallery_cam'][0]
 gallery_label = result['gallery_label'][0]
 
 
-mat_path = 'model/'+name+'/all_scores.mat'
+mat_path = model_path+'/'+name+'/all_scores.mat'
 all_scores = scipy.io.loadmat(mat_path)                   #important
 all_dist =  all_scores['all_scores']
 print('all_dist shape:',all_dist.shape)
