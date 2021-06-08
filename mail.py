@@ -13,7 +13,7 @@ import time
 #subject 邮件标题
 #content 邮件正文
 
-def sendMail(content='what content?', SMTPHost='smtp.126.com', fromAccount='testgpu318@126.com', fromPasswd='YXSVONCFBRKATTTP', toAccount='testgpu318@126.com', subject='eval_acc'):    
+def send_mail(content='what content?', SMTPHost='smtp.126.com', fromAccount='testgpu318@126.com', fromPasswd='YXSVONCFBRKATTTP', toAccount='testgpu318@126.com', subject='eval_acc'):    
 
     #构建邮件
     msg = MIMEMultipart()
@@ -39,9 +39,71 @@ def sendMail(content='what content?', SMTPHost='smtp.126.com', fromAccount='test
     email_client.quit()
     print('mail success')            
 
-if __name__ == '__main__':
-    acc=0.85
-    sendMail(content='result={}'.format(acc), toAccount='m18679060131@163.com',subject='t e s t')
+
+
+def get_gpu_memory():
+    os.system('nvidia-smi -q -d Memory | grep -A4 GPU | grep Free > tmp.txt')
+    memory_gpu = [int(x.split()[2]) for x in open('tmp.txt', 'r').readlines()]
+    os.system('rm tmp.txt')
+    return memory_gpu
+
+
+flag_last = get_gpu_memory() # 初始的GPU memory
+gpu_number = len(flag_last)  # GPU个数
+##############################################################################
+time_circle = 1800            # 检测一次的周期(秒)    30min
+iteration = 0                # 累计检测次数
+max_num = 10                   # 发送邮件失败次数上限
+##############################################################################
+while True:
+    
+    # print(time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())) 
+    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) 
+    gpu_memory = get_gpu_memory() #gpu_memory[0]
+    print("gpu free memory:{} ".format(gpu_memory))
+
+    #* test if GPU 0,1,2,3 is free
+    num = 0 
+    free_gpu_id = ''
+    for i in range(gpu_number):
+        if gpu_memory[i] > 31000:
+            free_gpu_id = free_gpu_id + str(i) + ' '
+
+    if len(free_gpu_id) > 0:
+        print("GPU {}FREE! ".format(free_gpu_id)) #o(￣▽￣)o
+        while True:
+            try:
+                send_mail("V100 GPU {}unused, free memory: {}".format(free_gpu_id, gpu_memory))
+                # send_mail("test?????")
+                break
+            except:
+                print('WWarning: email not sent.')
+                num+=1
+                if num>max_num:
+                    print('发送邮件失败')
+                    break
+    else:
+        print("No GPU is FREE! ") #ಠ_ಠ
+        if iteration % 8 == 0:
+            while True:
+                try:
+                    send_mail("All V100 GPUs are occupied, free memory: {}".format(gpu_memory))
+                    # send_mail("test")
+                    break
+                except:
+                    print('WWWWWarning: email not sent.')
+                    num+=1
+                    if num>max_num:
+                        print('发送邮件失败')
+                        break
+        
+    iteration = iteration + 1
+    time.sleep(time_circle)
+
+# if __name__ == '__main__':
+#     acc=0.85
+#     sendMail(content='result={}'.format(acc), toAccount='m18679060131@163.com',subject='t e s t')         
+            
             # num1=0
             # while True:
             #     try:
