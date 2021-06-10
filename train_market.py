@@ -49,11 +49,13 @@ for str_id in str_ids:
 # set gpu ids
 if len(gpu_ids)>0:
     torch.cuda.set_device(gpu_ids[0])
-#print(gpu_ids[0])
-#!!!modify the path and 
-if not os.path.exists("./model/"):
-    os.makedirs("./model/")
+#print(gpu_ids [0])
 
+
+if not os.path.exists("../ST_model/"):
+    os.makedirs("../ST_model/")
+model_path = '../ST_model'
+#? change ./model/ to ../ST_model/
 ######################################################################
 # Load Data
 # ---------
@@ -77,7 +79,7 @@ transform_val_list = [
 if opt.PCB:
     transform_train_list = [
         transforms.Resize((384,192), interpolation=3),
-        transforms.RandomHorizontalFlip(),
+        transforms.RandomHorizontalFlip(), #!!!!!!!!!!!!!!!!!!!!
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ]
@@ -86,7 +88,7 @@ if opt.PCB:
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ]
-
+#* randomreasing
 if opt.erasing_p>0:
     transform_train_list = transform_train_list +  [RandomErasing(probability = opt.erasing_p, mean=[0.0, 0.0, 0.0])]
 
@@ -102,17 +104,17 @@ data_transforms = {
 
 train_all = ''
 if opt.train_all:
-     train_all = '_all'
+    train_all = '_all'
 
 image_datasets = {}
 image_datasets['train'] = datasets.ImageFolder(os.path.join(data_dir, 'train' + train_all),
-                                          data_transforms['train'])
+                                        data_transforms['train'])
 image_datasets['val'] = datasets.ImageFolder(os.path.join(data_dir, 'val'),
-                                          data_transforms['val'])
+                                        data_transforms['val'])
 
 dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=opt.batchsize,
-                                             shuffle=True, num_workers=16)
-              for x in ['train', 'val']}
+                                            shuffle=True, num_workers=16)
+            for x in ['train', 'val']}
 dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
 class_names = image_datasets['train'].classes
 
@@ -251,14 +253,14 @@ def draw_curve(current_epoch):
     if current_epoch == 0:
         ax0.legend()
         ax1.legend()
-    fig.savefig( os.path.join('./model',name,'train.jpg'))
+    fig.savefig( os.path.join(model_path, name,'train.jpg'))
 
 ######################################################################
 # Save model
 #---------------------------
 def save_network(network, epoch_label):
     save_filename = 'net_%s.pth'% epoch_label
-    save_path = os.path.join('./model',name,save_filename)
+    save_path = os.path.join(model_path, name, save_filename)
     torch.save(network.cpu().state_dict(), save_path)
     if torch.cuda.is_available:
         network.cuda(gpu_ids[0])
@@ -328,7 +330,7 @@ exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=40, gamma=0.1)
 #
 # It should take around 1-2 hours on GPU. 
 #
-dir_name = os.path.join('./model',name)
+dir_name = os.path.join(model_path,name)
 if not os.path.isdir(dir_name):
     os.mkdir(dir_name)
 
