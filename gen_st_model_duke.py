@@ -47,8 +47,10 @@ def get_id(img_path):
     return camera_id, labels, frames
 
 def spatial_temporal_distribution(camera_id, labels, frames):
-    spatial_temporal_sum = np.zeros((702,8))                       
-    spatial_temporal_count = np.zeros((702,8))
+    class_num=702
+    max_hist = 3000 #!what?
+    spatial_temporal_sum = np.zeros((class_num,8))                       
+    spatial_temporal_count = np.zeros((class_num,8))
     eps = 0.0000001
     interval = 100.0
     
@@ -60,8 +62,8 @@ def spatial_temporal_distribution(camera_id, labels, frames):
         spatial_temporal_count[label_k][cam_k] = spatial_temporal_count[label_k][cam_k] + 1
     spatial_temporal_avg = spatial_temporal_sum/(spatial_temporal_count+eps)          # spatial_temporal_avg: 702 ids, 8cameras, center point
     
-    distribution = np.zeros((8,8,3000))
-    for i in range(702):
+    distribution = np.zeros((8,8,max_hist))
+    for i in range(class_num):
         for j in range(8-1):
             for k in range(j+1,8):
                 ###################################################### added
@@ -94,7 +96,7 @@ transform_train_list = [
         ]
 
 
-image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,transform_train_list) for x in ['train_all']}
+image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x) ,transform_train_list) for x in ['train_all']}
 train_path = image_datasets['train_all'].imgs
 train_cam, train_label, train_frames = get_id(train_path)
 
@@ -106,4 +108,4 @@ for i in range(len(train_path)):
 # distribution = spatial_temporal_distribution(train_cam, train_label, train_frames)
 distribution = spatial_temporal_distribution(train_cam, train_label_order, train_frames)
 result = {'distribution':distribution}
-scipy.io.savemat(model_path+'/'+name+'/'+'pytorch_result2.mat',result)
+scipy.io.savemat(model_path+'/'+name+'/'+'pytorch_result2.mat', result)

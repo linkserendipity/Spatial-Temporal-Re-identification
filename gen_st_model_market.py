@@ -40,48 +40,49 @@ def get_id(img_path):
         if label[0:2]=='-1':
             labels.append(-1)
         else:
-            labels.append(int(label))
+            labels.append(int(label))           # * labels 2 2 46个2, 7 7 7 ...
         camera_id.append(int(camera[0]))
         frames.append(int(frame))
     return camera_id, labels, frames           
 
+# TODO st_distribution supervised change to unsupervised????
 def spatial_temporal_distribution(camera_id, labels, frames):
     class_num=751 #* 751 people
-    max_hist = 5000 #! max_hist??
-    spatial_temporal_sum = np.zeros((class_num,8))                        #!!! 8 cameras???
+    max_hist = 5000 #! max_hist?? # TODO 这个hist做啥用的
+    spatial_temporal_sum = np.zeros((class_num,8))          #!!! 8 cameras??? 对齐duke
     spatial_temporal_count = np.zeros((class_num,8))
-    eps = 0.0000001
+    eps = 0.0000001                                         # 防止分母为零
     interval = 100.0
-    
-    for i in range(len(camera_id)):         #! camera_id is a list of 751 person?
-        label_k = labels[i]                 #### not in order, done
-        cam_k = camera_id[i]-1              ##### ### ### ### ### ### ### ### ### ### ### ### # from 1, not 0
+    ####*对一个人在某个摄像头的多次出现的时间做了平均，这样可以避免某个人在摄像头中出现时间太长引入的统计误差
+    for i in range(len(camera_id)):         #! camera_id is a list of 12936 pictures
+        label_k = labels[i]                 #### not in order, done 0,0,...46个0, 1,1,1...750
+        cam_k = camera_id[i]-1              ##### ### ### ### ### ### ### ### ### ### ### ### # from 1, not 0 
         frame_k = frames[i]
-        spatial_temporal_sum[label_k][cam_k]=spatial_temporal_sum[label_k][cam_k]+frame_k
+        spatial_temporal_sum[label_k][cam_k]=spatial_temporal_sum[label_k][cam_k]+frame_k #!每个id的frames全加起来？
         spatial_temporal_count[label_k][cam_k] = spatial_temporal_count[label_k][cam_k] + 1
     spatial_temporal_avg = spatial_temporal_sum/(spatial_temporal_count+eps)          # spatial_temporal_avg: 751 ids, 8cameras, center point
-    
-    distribution = np.zeros((8,8,max_hist))
-    for i in range(class_num):
-        for j in range(8-1):
+    #####
+    distribution = np.zeros((8,8,max_hist)) #! 8×8×5000
+    for i in range(class_num):  #* i代表id [0,750]
+        for j in range(8-1):    #* j代表cam_id [0,5]
             for k in range(j+1,8):
                 if spatial_temporal_count[i][j]==0 or spatial_temporal_count[i][k]==0:
                     continue 
                 st_ij = spatial_temporal_avg[i][j]
                 st_ik = spatial_temporal_avg[i][k]
                 if st_ij>st_ik:
-                    diff = st_ij-st_ik
-                    hist_ = int(diff/interval)
-                    distribution[j][k][hist_] = distribution[j][k][hist_]+1     # [big][small]
+                    diff = st_ij-st_ik                                          # 同一个id在j,k两个摄像机下的图片的平均frames差异
+                    hist_ = int(diff/interval)                                  #? 除以100然后取整 得到hist_ 意思是normalize然后成为横轴上的点???
+                    distribution[j][k][hist_] = distribution[j][k][hist_]+1     #! [big][small] frams_j>frams_k 100帧以内的diff都算成同一个点，得到落在这个区间的总数
                 else:
                     diff = st_ik-st_ij
                     hist_ = int(diff/interval)
                     distribution[k][j][hist_] = distribution[k][j][hist_]+1
     
-    sum_ = np.sum(distribution,axis=2)
+    sum_ = np.sum(distribution,axis=2) #! [hist_]全部加起来，变成8×8的矩阵
     for i in range(8):
         for j in range(8):
-            distribution[i][j][:]=distribution[i][j][:]/(sum_[i][j]+eps)
+            distribution[i][j][:]=distribution[i][j][:]/(sum_[i][j]+eps) #! distribution[i][j][:]和distribution[i][j]不是同一个东西吗
     
     return distribution                    # [to][from], to xxx camera, from xxx camera
 
@@ -129,7 +130,7 @@ train_cam, train_label, train_frames = get_id(train_path)
 train_label_order = []
 for i in range(len(train_path)):
     train_label_order.append(train_path[i][1]) 
-# * train_path[i][1]=0,0,...46个0,1,1,1,1
+# * train_path[i][1]=0,0,...46个0,1,1,1,1  把 2 2 2 ...7 7 7 改成从0开始的自然数列
 
 #todo distribution = spatial_temporal_distribution(train_cam, train_label, train_frames) 
 #! label=0002 0007 change to order=0,0...,1,1...1,2,2...2,3

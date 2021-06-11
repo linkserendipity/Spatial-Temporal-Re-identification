@@ -13,15 +13,12 @@ parser.add_argument('--smooth', default=50, type=float, help='smooth')
 parser.add_argument('--model_path', default='../ST_model', type=str, help='whole model path')
 #! add --model_path = '../ST_model'
 
-
 opt = parser.parse_args()
 name = opt.name
 alpha = opt.alpha
 smooth = opt.smooth
 model_path = opt.model_path
 #! !!!!!!!!!
-
-
 
 #######################################################################
 #! Evaluate ap_tmp, CMC_tmp = evaluate(query_feature[i],query_label[i],query_cam[i],query_frames[i], gallery_feature,gallery_label,gallery_cam,gallery_frames,distribution)
@@ -30,7 +27,7 @@ def evaluate(qf,ql,qc,qfr,gf,gl,gc,gfr,distribution):
     score = np.dot(gf,query)
 
     # spatial temporal scores: qfr,gfr, qc, gc
-    # TODO
+    
     interval = 100
     score_st = np.zeros(len(gc))
     for i in range(len(gc)):
