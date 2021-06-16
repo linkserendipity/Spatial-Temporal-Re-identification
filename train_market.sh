@@ -6,5 +6,5 @@
 # CUDA_VISIBLE_DEVICES=1 python3 evaluate_st.py --name ft_ResNet50_pcb_market_e
 #*rerank
 # CUDA_VISIBLE_DEVICES=1 python3 gen_rerank_all_scores_mat.py --name ft_ResNet50_pcb_market_e
-python3 evaluate_rerank_market.py --name ft_ResNet50_pcb_market_e
+# python3 evaluate_rerank_market.py --name ft_ResNet50_pcb_market_e
 #todo add log time!
