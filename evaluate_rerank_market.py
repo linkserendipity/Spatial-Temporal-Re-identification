@@ -71,7 +71,7 @@ gallery_cam = result['gallery_cam'][0]
 gallery_label = result['gallery_label'][0]
 
 
-mat_path = model_path+'/'+name+'/all_scores.mat'
+mat_path = model_path+'/'+name+'/all_scores.mat' #* 导入all_scores.mat
 all_scores = scipy.io.loadmat(mat_path)                   #important
 all_dist =  all_scores['all_scores']
 print('all_dist shape:',all_dist.shape)

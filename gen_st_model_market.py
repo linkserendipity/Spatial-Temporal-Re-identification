@@ -123,7 +123,7 @@ transform_train_list = [
 
 #* image_data: x 是文件夹序号，person id 0002对应x=0，0007对应x=1
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x) ,transform_train_list) for x in ['train_all']} #* transform_train_list有什么用?
-train_path = image_datasets['train_all'].imgs   # ! len(train_path)=12936
+train_path = image_datasets['train_all'].imgs   # !! len(train_path)=12936
 train_cam, train_label, train_frames = get_id(train_path)
 #! train_path[0]=('/home/ccc/Link/data/dataset/market_rename/train_all/0002/0002_c1_f0000451_03.jpg', 0) 
 
